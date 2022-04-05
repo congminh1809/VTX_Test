@@ -13,9 +13,16 @@ public:
 
 	void Import();
 	void Export();
-	float addition();
-	float subtraction();
-	float multiplication();
+	void addition(Matrix* matrix1, Matrix* matrix2);
+	void subtraction(Matrix* matrix1, Matrix* matrix2);
+	void multiplication(Matrix* matrix1, Matrix* matrix2);
+	int getRowNum() {
+		return this->rowNumber;
+	}
+
+	int getColNum() {
+		return this->colNumber;
+	}
 
 	Matrix();
 	~Matrix();
@@ -24,14 +31,18 @@ public:
 void Matrix::Import()
 {
 	cin.ignore();
+	cout << "Row Number: ";
 	cin >> rowNumber;
+	cout << "Column Number: ";
 	cin >> colNumber;
-	
+
 	for (int i = 0; i < rowNumber; i++)
 	{
 		for (int j = 0; j < colNumber; j++)
 		{
-			cin >> matrix[rowNumber][colNumber];
+			cout << "Matrix" << "[" << i << "][" << j << "] = ";
+			cin >> matrix[i][j];
+			cout << endl;
 		}
 	}
 
@@ -43,9 +54,84 @@ void Matrix::Export()
 	{
 		for (int j = 0; j < colNumber; j++)
 		{
-			cout << matrix[rowNumber][colNumber] << "	";
+			cout << matrix[i][j] << "	";
+		}
+		cout << endl << endl;
+	}
+}
+
+// Addition 2 matrix
+void Matrix::addition(Matrix* matrix1, Matrix* matrix2) {
+	//Matrix *tempMatrix;
+	float a[100][100];
+	for (int i = 0; i < matrix1->rowNumber; i++)
+	{
+		for (int j = 0; j < matrix1->colNumber; j++)
+		{
+			//tempMatrix->matrix[i][i] = matrix1->matrix[i][j] + matrix2->matrix[i][j];
+			a[i][j] = matrix1->matrix[i][j] + matrix2->matrix[i][j];
+		}
+	}
+	//tempMatrix->Export();
+	for (int i = 0; i < matrix1->rowNumber; i++)
+	{
+		for (int j = 0; j < matrix1->colNumber; j++)
+		{
+			cout << a[i][j] << "	";
+		}
+		cout << endl << endl;
+	}
+}
+
+
+// Subtraction 2 matrix
+void Matrix::subtraction(Matrix* matrix1, Matrix* matrix2) {
+	//Matrix *tempMatrix;
+	float a[100][100];
+	for (int i = 0; i < matrix1->rowNumber; i++)
+	{
+		for (int j = 0; j < matrix1->colNumber; j++)
+		{
+			//tempMatrix->matrix[i][i] = matrix1->matrix[i][j] + matrix2->matrix[i][j];
+			a[i][j] = matrix1->matrix[i][j] - matrix2->matrix[i][j];
+		}
+	}
+	//tempMatrix->Export();
+	for (int i = 0; i < matrix1->rowNumber; i++)
+	{
+		for (int j = 0; j < matrix1->colNumber; j++)
+		{
+			cout << a[i][j] << "	";
+		}
+		cout << endl << endl;
+	}
+}
+
+// Multiplication 2 matrix
+void Matrix::multiplication(Matrix* matrix1, Matrix* matrix2) {
+	//Matrix *tempMatrix;
+	float a[100][100];
+	for (int i = 0; i < matrix1->rowNumber; i++)
+	{
+		for (int j = 0; j < matrix2->colNumber; j++)
+		{
+			//tempMatrix->matrix[i][i] = matrix1->matrix[i][j] + matrix2->matrix[i][j];
+			a[i][j] = 0;
+			for (int k = 0; k < matrix1->rowNumber; k++)
+			{
+				a[i][j] = a[i][j] + (matrix1->matrix[i][k] * matrix2->matrix[k][j]);
+			}
 		}
 		cout << endl;
+	}
+	//tempMatrix->Export();
+	for (int i = 0; i < matrix1->rowNumber; i++)
+	{
+		for (int j = 0; j < matrix1->colNumber; j++)
+		{
+			cout << a[i][j] << "	";
+		}
+		cout << endl << endl;
 	}
 }
 
@@ -69,12 +155,15 @@ void Menu(Matrix* matrixArray[], int matrixNumber)
 		cout << "\n\n\t\t ====== Matrix ======";
 		cout << "\n1. Import matrix";
 		cout << "\n2. Export matrix";
+		cout << "\n3. Addition 2 matrix";
+		cout << "\n4. Subtraction 2 matrix";
+		cout << "\n5. Multiplication 2 matrix";
 		cout << "\n0. End";
 		cout << "\n\n\t\t ======= END =======";
 
 		cout << "\nNhap lua chon: ";
 		cin >> choice;
-		if (choice < 0 || choice > 2)
+		if (choice < 0 || choice > 5)
 		{
 			cout << "\nInvalid Choice";
 		}
@@ -91,19 +180,90 @@ void Menu(Matrix* matrixArray[], int matrixNumber)
 			matrixArray[matrixNumber] = matrix;
 			matrixNumber++;
 		}
-		
+
 		else if (choice == 2)
 		{
-			
+
 			for (int i = 0; i < matrixNumber; i++)
 			{
 				cout << "\n\n\t Export matrix number: " << i + 1 << endl;
 				matrixArray[i]->Export();
 			}
-			
+
 			system("pause");
 		}
-		
+
+		else if (choice == 3)
+		{
+			int matrix1, matrix2;
+			cout << "Number of 1st Matrix: ";
+			cin >> matrix1;
+			matrix1 = matrix1 - 1;
+			cout << "Number of 2nd Matrix: ";
+			cin >> matrix2;
+			matrix2 = matrix2 - 1;
+			if (matrixArray[matrix1]->getRowNum() == matrixArray[matrix2]->getRowNum() && matrixArray[matrix1]->getColNum() == matrixArray[matrix2]->getColNum())
+			{
+				Matrix* addMatrix = new Matrix();
+				addMatrix->addition(matrixArray[matrix1], matrixArray[matrix2]);
+
+				system("pause");
+			}
+			else
+			{
+				cout << "Row number and Column number of two matrixs are not valid." << endl;
+				system("pause");
+			}
+			
+		}
+
+		else if (choice == 4)
+		{
+			int matrix1, matrix2;
+			cout << "Number of 1st Matrix: ";
+			cin >> matrix1;
+			matrix1 = matrix1 - 1;
+			cout << "Number of 2nd Matrix: ";
+			cin >> matrix2;
+			matrix2 = matrix2 - 1;
+			if (matrixArray[matrix1]->getRowNum() == matrixArray[matrix2]->getRowNum() && matrixArray[matrix1]->getColNum() == matrixArray[matrix2]->getColNum())
+			{
+				Matrix* subMatrix = new Matrix();
+				subMatrix->subtraction(matrixArray[matrix1], matrixArray[matrix2]);
+
+				system("pause");
+			}
+			else
+			{
+				cout << "Row number and Column number of two matrixs are not valid." << endl;
+				system("pause");
+			}
+			
+		}
+
+		else if (choice == 5)
+		{
+			int matrix1, matrix2;
+			cout << "Number of 1st Matrix: ";
+			cin >> matrix1;
+			matrix1 = matrix1 - 1;
+			cout << "Number of 2nd Matrix: ";
+			cin >> matrix2;
+			matrix2 = matrix2 - 1;
+			if (matrixArray[matrix1]->getColNum() == matrixArray[matrix2]->getRowNum())
+			{
+				Matrix* mulMatrix = new Matrix();
+				mulMatrix->multiplication(matrixArray[matrix1], matrixArray[matrix2]);
+
+				system("pause");
+			}
+			else
+			{
+				cout << "Row number and Column number of two matrixs are not valid." << endl;
+				system("pause");
+			}
+		}
+
 	}
 
 	// giải phóng các đối tượng con trỏ 
